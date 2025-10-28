@@ -10,15 +10,21 @@ app.listen(port, async () => {
 });
 
 db.sequelize.sync()
-// Sinkronisasi model Sequelize dengan database (membuat tabel jika belum ada)
 .then(() => {
 app.listen(3000, () => {
-    // Menjalankan server Express di port 3000 setelah database siap
     console.log('Server started');
-    // Menampilkan pesan di console bahwa server berhasil dijalankan
     });
 })
 .catch((err) => {
-    // Menangani error jika terjadi kegagalan sinkronisasi database
     console.log(err);
+});
+
+app.post('/komik', async (req, res) => {
+    const data = req.body;
+    try {
+        const komik = await db.Komik.create(data);
+        res.send(komik);
+    } catch (err) {
+        res.send(err);
+    }
 });
